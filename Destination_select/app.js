@@ -50,6 +50,11 @@ app.get('/listings', async (req, res) => {
   let allListing = await Listing.find();
   res.render('listing/index.ejs', { allListing });
 });
+// New & Create Route
+//
+app.get('/listings/new', (req, res) => {
+  res.render('listing/new.ejs');
+});
 
 // Read:Show Route
 app.get('/listings/:id', async (req, res) => {
@@ -57,6 +62,14 @@ app.get('/listings/:id', async (req, res) => {
   const listing = await Listing.findById(id);
   res.render('listing/show.ejs', { listing });
 });
+// Create New Route  When form Added
+app.post('/listings', async (req, res) => {
+  // let listing = req.body.listing;
+  const newListing = Listing(req.body.listing);
+  await newListing.save();
+  res.redirect('/listings');
+});
+
 app.listen(8080, () => {
   console.log('Server listening on the port :8080');
 });
