@@ -12,6 +12,8 @@ async function main() {
 // Set EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+// when data comes in URL it is required
+app.use(express.urlencoded({ extended: true }));
 main()
   .then(() => {
     console.log('Connection Successful!!');
@@ -44,9 +46,16 @@ app.get('/', (req, res) => {
 // });
 
 // Index Route
-app.get('/listing', async (req, res) => {
+app.get('/listings', async (req, res) => {
   let allListing = await Listing.find();
   res.render('listing/index.ejs', { allListing });
+});
+
+// Read:Show Route
+app.get('/listings/:id', async (req, res) => {
+  let { id } = req.params;
+  const listing = await Listing.findById(id);
+  res.render('listing/show.ejs', { listing });
 });
 app.listen(8080, () => {
   console.log('Server listening on the port :8080');
