@@ -1,33 +1,25 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const listSchema = new Schema({
+const listingSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-  },
+  description: String,
   image: {
-    type: String,
-    default:
-      'https://img.freepik.com/free-photo/young-woman-hiker-taking-photo-with-smartphone-mountains-peak-winter_335224-427.jpg?w=996&t=st=1699977272~exp=1699977872~hmac=17a2fb163b8c33238a31d77736ec2ae0296a2b3a45e8c5255c9803e9a4e99c23',
+    type: Object,
     set: (v) =>
       v === ''
-        ? 'https://img.freepik.com/free-photo/young-woman-hiker-taking-photo-with-smartphone-mountains-peak-winter_335224-427.jpg?w=996&t=st=1699977272~exp=1699977872~hmac=17a2fb163b8c33238a31d77736ec2ae0296a2b3a45e8c5255c9803e9a4e99c23'
+        ? 'https://images.unsplash.com/photo-1625505826533-5c80aca7d157?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGdvYXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60'
         : v,
+    default:
+      'https://images.unsplash.com/photo-1625505826533-5c80aca7d157?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGdvYXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60',
   },
-  price: {
-    type: String,
-  },
-  location: {
-    type: String,
-  },
-  country: {
-    type: String,
-  },
+  price: Number,
+  location: String,
+  country: String,
 });
 
-const Listing = mongoose.model('Listing', listSchema);
+const Listing = mongoose.model('Listing', listingSchema);
 module.exports = Listing;

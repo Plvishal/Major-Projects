@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Listing = require('./Models/listing');
+const Listing = require('./models/listing.js');
 const app = express();
 
 // DB Connection
