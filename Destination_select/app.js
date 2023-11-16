@@ -83,6 +83,7 @@ app.post('/listings', async (req, res) => {
 app.get('/listings/:id/edit', async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
+  console.log(listing.image);
   res.render('listing/edit.ejs', { listing });
 });
 
