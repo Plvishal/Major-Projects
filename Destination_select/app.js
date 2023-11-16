@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Listing = require('./models/listing.js');
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 const path = require('path');
 const app = express();
 
@@ -17,6 +18,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 // For the method override
 app.use(methodOverride('_method'));
+// EJS  Mate use
+app.engine('ejs', ejsMate);
+//  for the static use like CSS and JS
+app.use(express.static(path.join(__dirname, '/public')));
+
 main()
   .then(() => {
     console.log('Connection Successful!!');
