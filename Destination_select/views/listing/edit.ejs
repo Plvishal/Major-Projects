@@ -3,40 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create New List</title>
+    <title>Destination Select</title>
   </head>
   <body>
-    <h3>Create New Lis</h3>
-    <form action="/listings" method="POST">
+    <h3>Edit Your Listing</h3>
+    <form method="POST" action="/listings/<%= listing._id%>?_method=PUT">
       <!-- name='listing[]'  -->
       <input
         type="text"
         name="listing[title]"
-        placeholder="Enter Your Title"
+        value="<%= listing.title%>"
       /><br />
-      <textarea name="listing[description]" id="" cols="30" rows="4"></textarea
+      <textarea name="listing[decription]" id="" cols="30" rows="4">
+<%= listing.description%></textarea
       ><br /><br />
       <input
         type="text"
-        name="image"
-        placeholder="Enter Your URL/Image"
+        name="listing[image]"
+        value="<%= listing.image%>"
       /><br />
       <input
         type="text"
         name="listing[price]"
-        placeholder="Enter Your Price"
+        value="<%= listing.price%>"
       /><br />
       <input
         type="text"
         name="listing[location]"
-        placeholder="Enter Your Location"
+        value="<%= listing.location%>"
       /><br />
       <input
         type="text"
         name="listing[country]"
-        placeholder="Enter Your Country"
+        value="<%= listing.country%>"
       /><br />
-      <button>Add</button>
+      <button>Edit</button>
     </form>
   </body>
 </html>
