@@ -91,15 +91,6 @@ app.post(
       throw new ExpressError(400, 'Send valid data for the listing');
     }
     const newListing = Listing(req.body.listing);
-    if (!newListing.description) {
-      throw new ExpressError(400, 'Description is missing');
-    }
-    if (!newListing.title) {
-      throw new ExpressError(400, 'Title is missing');
-    }
-    if (!newListing.location) {
-      throw new ExpressError(400, 'Location is missing');
-    }
 
     await newListing.save();
     res.redirect('/listings');
