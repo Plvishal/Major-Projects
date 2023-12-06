@@ -72,11 +72,15 @@ app.get('/listings/:id', async (req, res) => {
   res.render('listing/show.ejs', { listing });
 });
 // Create New Route  When form Added
-app.post('/listings', async (req, res) => {
+app.post('/listings', async (req, res, next) => {
   // let listing = req.body.listing;
-  const newListing = Listing(req.body.listing);
-  await newListing.save();
-  res.redirect('/listings');
+  try {
+    const newListing = Listing(req.body.listing);
+    await newListing.save();
+    res.redirect('/listings');
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Update: Edit/Edit Route (GET & PUT)
@@ -100,6 +104,11 @@ app.delete('/listings/:id', async (req, res) => {
   let deleteListing = await Listing.findByIdAndDelete(id);
   // console.log(deleteListing);
   res.redirect('/listings');
+});
+
+// Error Handling
+app.use((err, req, res, next) => {
+  res.send('Something went wrong');
 });
 
 app.listen(8080, () => {
