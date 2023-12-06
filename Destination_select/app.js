@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Listing = require('./models/listing.js');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const wrapAsync = require('./utils/Error/wrapAsync.js');
 const path = require('path');
 const app = express();
 
@@ -72,16 +73,16 @@ app.get('/listings/:id', async (req, res) => {
   res.render('listing/show.ejs', { listing });
 });
 // Create New Route  When form Added
-app.post('/listings', async (req, res, next) => {
-  // let listing = req.body.listing;
-  try {
+app.post(
+  '/listings',
+  wrapAsync(async (req, res, next) => {
+    // let listing = req.body.listing;
+
     const newListing = Listing(req.body.listing);
     await newListing.save();
     res.redirect('/listings');
-  } catch (err) {
-    next(err);
-  }
-});
+  })
+);
 
 // Update: Edit/Edit Route (GET & PUT)
 app.get('/listings/:id/edit', async (req, res) => {
