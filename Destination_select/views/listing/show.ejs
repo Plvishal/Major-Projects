@@ -55,6 +55,9 @@
   <p class="card-text"><%= review.comment%></p>
   <p class="card-text"><%= review.rating%>star</p>
 </div>
+<form class="mb-3" method="post" action="/listings/<%=listing._id%>/reviews/<%= review._id%>?_method=DELETE">
+  <button class="btn btn-outline-dark mt-2 btn-sm" >Delete</button>
+</form>
   </div>
        <%}%>
   </div>
