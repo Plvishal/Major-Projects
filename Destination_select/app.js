@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/Error/wrapAsync.js');
 const ExpressError = require('./utils/Error/ExpressError.js');
-const listingSchema = require('./SchemaValidation.js');
+const { listingSchema, reviewSchema } = require('./SchemaValidation.js');
 const path = require('path');
 const app = express();
 
@@ -39,25 +39,26 @@ main()
 app.get('/', (req, res) => {
   res.send('Your home roots is working');
 });
-// Create new for testListing
-// app.get('/testListing', async(req, res) => {
-//   let sampleListing = new Listing({
-//     title: 'Florican Room',
-//     description: 'Private room in farm stay',
-//     price: 5000,
-//     location: 'Nashik',
-//     country: 'India',
-//   });
-//   // await sampleListing
-//   //   .save()
-//   //   .then((res) => {
-//   //     console.log(res);
-//   //   })
-//   //   .catch((err) => {
-//   //     console.log(err);
-//   //   });
-//   res.send('working');
-// });
+// server side validation for listings
+const validationListing = (req, rex, next) => {
+  let { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(',');
+    throw new ExpressError(404, errMsg);
+  } else {
+    next();
+  }
+};
+// server side validation for reviews
+const validationReview = (req, rex, next) => {
+  let { error } = reviewSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(',');
+    throw new ExpressError(404, errMsg);
+  } else {
+    next();
+  }
+};
 
 // Index Route
 app.get(
@@ -132,15 +133,19 @@ app.delete(
   })
 );
 // Review  post Route
-app.post('/listings/:id/reviews', async (req, res) => {
-  let listing = await Listing.findById(req.params.id);
-  let newReview = new Review(req.body.review);
-  listing.reviews.push(newReview);
-  await newReview.save();
-  await listing.save();
+app.post(
+  '/listings/:id/reviews',
+  validationReview,
+  wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
 
-  res.redirect(`/listings/${listing._id}`);
-});
+    res.redirect(`/listings/${listing._id}`);
+  })
+);
 // Error Handling
 app.all('*', (req, res, next) => {
   next(new ExpressError(404, 'Page not found'));
