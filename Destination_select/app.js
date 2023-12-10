@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const listingRouter = require('./routes/listing.js');
+const routerListing = require('./routes/listing.js');
 const reviewRouter = require('./routes/reviewRouter.js');
 const userRouter = require('./routes/userRoutes.js');
 const session = require('express-session');
@@ -80,7 +80,7 @@ app.use((req, res, next) => {
 // });
 
 // Use here listing router
-app.use('/listings', listingRouter);
+app.use('/listings', routerListing);
 // Use here Review router
 app.use('/listings/:id/reviews', reviewRouter);
 // user router

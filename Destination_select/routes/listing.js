@@ -1,9 +1,10 @@
 const experess = require('express');
-const router = experess.Router();
 const Listing = require('../models/listing.js');
+const routerListing = experess.Router();
 const wrapAsync = require('../utils/Error/wrapAsync.js');
 const ExpressError = require('../utils/Error/ExpressError.js');
 const { listingSchema } = require('../SchemaValidation.js');
+const isLoggedIn = require('../middleware/userAuth.js');
 // server side validation for listings
 const validationListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -16,7 +17,7 @@ const validationListing = (req, res, next) => {
 };
 
 // Index Route
-router.get(
+routerListing.get(
   '/',
   wrapAsync(async (req, res) => {
     let allListing = await Listing.find();
@@ -25,13 +26,14 @@ router.get(
 );
 // New & Create Route
 //
-router.get(
+routerListing.get(
   '/new',
+  isLoggedIn,
   wrapAsync((req, res) => {
     res.render('listing/new.ejs');
   })
 );
-router.get(
+routerListing.get(
   '/:id',
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -44,8 +46,9 @@ router.get(
   })
 );
 // Create New Route  When form Added
-router.post(
+routerListing.post(
   '/',
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     // let listing = req.body.listing;
     const resultError = listingSchema.validate(req.body);
@@ -60,8 +63,9 @@ router.post(
 );
 
 // Update: Edit/Edit Route (GET & PUT)
-router.get(
+routerListing.get(
   '/:id/edit',
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
@@ -70,7 +74,7 @@ router.get(
       res.redirect('/listings');
     }
 
-    if (listing.error) {
+    if (listing) {
       throw new ExpressError(400, resultError.error);
     }
     res.render('listing/edit.ejs', { listing });
@@ -78,8 +82,9 @@ router.get(
 );
 
 // Update Route
-router.put(
+routerListing.put(
   '/:id',
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
@@ -88,8 +93,9 @@ router.put(
   })
 );
 // Delete Listing: Delete Route
-router.delete(
+routerListing.delete(
   '/:id',
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deleteListing = await Listing.findByIdAndDelete(id);
@@ -99,4 +105,4 @@ router.delete(
   })
 );
 
-module.exports = router;
+module.exports = routerListing;
