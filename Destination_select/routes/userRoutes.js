@@ -10,14 +10,18 @@ userRouter.get('/signup', (req, res) => {
 
 userRouter.post(
   '/signup',
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     try {
       let { username, email, password } = req.body;
       const newUser = new UserModel({ email, username });
       const registerUser = await UserModel.register(newUser, password);
-
-      req.flash('success', 'Welcame to Wonderlust');
-      res.redirect('/listings');
+      req.login(registerUser, (err) => {
+        if (err) {
+          return next(err);
+        }
+        req.flash('success', 'Welcame to Wonderlust');
+        res.redirect('/listings');
+      });
     } catch (err) {
       req.flash('error', err.message);
       res.redirect('/signup');
@@ -44,10 +48,10 @@ userRouter.post(
 userRouter.get('/logout', (req, res, next) => {
   req.logOut((err) => {
     if (err) {
-     return next(err);
+      return next(err);
     }
-    req.flash("success","You are logged out now")
-    res.redirect("/listings")
+    req.flash('success', 'You are logged out now');
+    res.redirect('/listings');
   });
 });
 module.exports = userRouter;
