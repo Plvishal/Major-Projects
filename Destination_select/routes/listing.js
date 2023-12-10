@@ -5,7 +5,7 @@ const wrapAsync = require('../utils/Error/wrapAsync.js');
 const ExpressError = require('../utils/Error/ExpressError.js');
 const { listingSchema } = require('../SchemaValidation.js');
 // server side validation for listings
-const validationListing = (req, rex, next) => {
+const validationListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
   if (error) {
     let errMsg = error.details.map((el) => el.message).join(',');
