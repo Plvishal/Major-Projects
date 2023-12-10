@@ -35,7 +35,7 @@ routerListing.get(
 );
 // show route
 routerListing.get(
-  '/:id',
+  '/:id', isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id)
