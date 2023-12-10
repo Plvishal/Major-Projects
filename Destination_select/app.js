@@ -34,10 +34,15 @@ app.engine('ejs', ejsMate);
 //  for the static use like CSS and JS
 app.use(express.static(path.join(__dirname, '/public')));
 
-const sessionOption ={
+const sessionOption = {
   secret: 'mysupersecreatstring',
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 3,
+    maxAge: 1000 * 60 * 60 * 24 * 3,
+    httpOnly: true,
+  },
 };
 app.use(session(sessionOption));
 // Create New Home  Routes
