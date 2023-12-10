@@ -4,6 +4,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const listingRouter = require('./routes/listing.js');
 const reviewRouter = require('./routes/reviewRouter.js');
+const userRouter = require('./routes/userRoutes.js');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -82,6 +83,8 @@ app.get('/demo', async (req, res) => {
 app.use('/listings', listingRouter);
 // Use here Review router
 app.use('/listings/:id/reviews', reviewRouter);
+// user router
+app.use("/",userRouter)
 // Read:Show Route
 
 // Review  post Route
