@@ -40,4 +40,14 @@ userRouter.post(
     res.redirect('/listings');
   }
 );
+
+userRouter.get('/logout', (req, res, next) => {
+  req.logOut((err) => {
+    if (err) {
+     return next(err);
+    }
+    req.flash("success","You are logged out now")
+    res.redirect("/listings")
+  });
+});
 module.exports = userRouter;
