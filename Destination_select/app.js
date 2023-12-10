@@ -70,21 +70,21 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
-app.get('/demo', async (req, res) => {
-  let fakeUser = new User({
-    email: 'vp@gmail.com',
-    username: 'vishal',
-  });
-  let registerUser = await User.register(fakeUser, 'vishal123');
-  res.send(registerUser);
-});
+// app.get('/demo', async (req, res) => {
+//   let fakeUser = new User({
+//     email: 'vp@gmail.com',
+//     username: 'vishal',
+//   });
+//   let registerUser = await User.register(fakeUser, 'vishal123');
+//   res.send(registerUser);
+// });
 
 // Use here listing router
 app.use('/listings', listingRouter);
 // Use here Review router
 app.use('/listings/:id/reviews', reviewRouter);
 // user router
-app.use("/",userRouter)
+app.use('/', userRouter);
 // Read:Show Route
 
 // Review  post Route
