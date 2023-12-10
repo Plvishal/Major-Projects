@@ -3,7 +3,7 @@ const router = experess.Router();
 const Listing = require('../models/listing.js');
 const wrapAsync = require('../utils/Error/wrapAsync.js');
 const ExpressError = require('../utils/Error/ExpressError.js');
-const { listingSchema} = require('../SchemaValidation.js');
+const { listingSchema } = require('../SchemaValidation.js');
 // server side validation for listings
 const validationListing = (req, rex, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -50,6 +50,7 @@ router.post(
     }
     const newListing = Listing(req.body.listing);
     await newListing.save();
+    req.flash('success', 'New Listing Created !!');
     res.redirect('/listings');
   })
 );

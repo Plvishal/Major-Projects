@@ -5,6 +5,7 @@ const ejsMate = require('ejs-mate');
 const listingRouter = require('./routes/listing.js');
 const reviewRouter = require('./routes/reviewRouter.js');
 const session = require('express-session');
+const flash = require('connect-flash');
 const path = require('path');
 const app = express();
 
@@ -44,10 +45,17 @@ const sessionOption = {
     httpOnly: true,
   },
 };
-app.use(session(sessionOption));
 // Create New Home  Routes
 app.get('/', (req, res) => {
   res.send('Your home roots is working');
+});
+
+app.use(session(sessionOption));
+app.use(flash());
+// create middleware for flash
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  next();
 });
 
 // Use here listing router
