@@ -4,6 +4,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const listingRouter = require('./routes/listing.js');
 const reviewRouter = require('./routes/reviewRouter.js');
+const session = require('express-session');
 const path = require('path');
 const app = express();
 
@@ -12,18 +13,6 @@ let MONGO_URL = 'mongodb://127.0.0.1:27017/Destination_select';
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
-// Set EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-// when data comes in URL it is required
-app.use(express.urlencoded({ extended: true }));
-// For the method override
-app.use(methodOverride('_method'));
-// EJS  Mate use
-app.engine('ejs', ejsMate);
-//  for the static use like CSS and JS
-app.use(express.static(path.join(__dirname, '/public')));
-
 main()
   .then(() => {
     console.log('Connection Successful!!');
@@ -31,6 +20,26 @@ main()
   .catch((err) => {
     console.log(err);
   });
+
+// Set EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+// when data comes in URL it is required
+app.use(express.urlencoded({ extended: true }));
+// For the method override
+app.use(methodOverride('_method'));
+
+// EJS  Mate use
+app.engine('ejs', ejsMate);
+//  for the static use like CSS and JS
+app.use(express.static(path.join(__dirname, '/public')));
+
+const sessionOption ={
+  secret: 'mysupersecreatstring',
+  resave: false,
+  saveUninitialized: true,
+};
+app.use(session(sessionOption));
 // Create New Home  Routes
 app.get('/', (req, res) => {
   res.send('Your home roots is working');
