@@ -6,6 +6,9 @@ const listingRouter = require('./routes/listing.js');
 const reviewRouter = require('./routes/reviewRouter.js');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStretegy = require('passport-local');
+const User = require('./Models/user.js');
 const path = require('path');
 const app = express();
 
@@ -52,11 +55,27 @@ app.get('/', (req, res) => {
 
 app.use(session(sessionOption));
 app.use(flash());
+
+// Passport Implementation
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStretegy(User.authenticate));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // create middleware for flash
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
+});
+app.get('/demo', async (req, res) => {
+  let fakeUser = new User({
+    email: 'vp@gmail.com',
+    username: 'vishal',
+  });
+  let registerUser = await User.register(fakeUser, 'vishal123');
+  res.send(registerUser);
 });
 
 // Use here listing router
