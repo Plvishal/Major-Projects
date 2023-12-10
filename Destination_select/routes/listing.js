@@ -73,10 +73,6 @@ routerListing.get(
       req.flash('error', 'Listing  does not exist !');
       res.redirect('/listings');
     }
-
-    if (listing) {
-      throw new ExpressError(400, resultError.error);
-    }
     res.render('listing/edit.ejs', { listing });
   })
 );
