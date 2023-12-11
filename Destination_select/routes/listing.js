@@ -43,6 +43,8 @@ routerListing.put(
   '/:id',
   isLoggedIn,
   isOwner,
+  upload.single('listing[image]'),
+  validationListing,
   wrapAsync(listingController.updateListing)
 );
 // Delete Listing: Delete Route
