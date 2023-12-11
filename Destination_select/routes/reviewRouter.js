@@ -5,13 +5,16 @@ const Review = require('../models/review.js');
 const Listing = require('../models/listing.js');
 const wrapAsync = require('../utils/Error/wrapAsync.js');
 const validationReview = require('../middleware/validateReview.js');
+const isloggedIn = require('../middleware/userAuth.js');
 
 reviewRouter.post(
   '/',
+  isloggedIn,
   validationReview,
   wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
+    newReview.author = req.user._id;
     listing.reviews.push(newReview);
     await newReview.save();
     req.flash('success', ' New Reviews Created');

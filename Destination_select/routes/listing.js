@@ -4,10 +4,9 @@ const routerListing = experess.Router();
 const wrapAsync = require('../utils/Error/wrapAsync.js');
 const isLoggedIn = require('../middleware/userAuth.js');
 const { isOwner } = require('../middleware/userAuthorization.js');
-const validationListing=require("../middleware/validationListing.js")
+const validationListing = require('../middleware/validationListing.js');
 const { listingSchema } = require('../SchemaValidation.js');
-const validateReview= require("../middleware/validateReview.js")
-
+const validateReview = require('../middleware/validateReview.js');
 
 // Index Route
 routerListing.get(
@@ -29,7 +28,6 @@ routerListing.get(
 // show route
 routerListing.get(
   '/:id',
-  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id)
