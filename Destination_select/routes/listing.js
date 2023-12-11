@@ -7,6 +7,9 @@ const validationListing = require('../middleware/validationListing.js');
 
 const validateReview = require('../middleware/validateReview.js');
 const listingController = require('../controllers/listing.js');
+const multer = require('multer');
+const { storage } = require('../CloudConfig.js');
+const upload = multer({ storage });
 
 // Index Route
 routerListing.get('/', wrapAsync(listingController.index));
@@ -20,7 +23,12 @@ routerListing.get(
 // show route
 routerListing.get('/:id', wrapAsync(listingController.showListing));
 // Create New Route  When form Added
-routerListing.post('/', isLoggedIn, wrapAsync(listingController.createListing));
+routerListing.post(
+  '/',
+  isLoggedIn,
+  upload.single('listing[image]'),
+  wrapAsync(listingController.createListing)
+);
 
 // Update: Edit/Edit Route (GET & PUT)
 routerListing.get(
