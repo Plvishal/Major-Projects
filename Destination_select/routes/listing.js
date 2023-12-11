@@ -7,15 +7,10 @@ const { isOwner } = require('../middleware/userAuthorization.js');
 const validationListing = require('../middleware/validationListing.js');
 const { listingSchema } = require('../SchemaValidation.js');
 const validateReview = require('../middleware/validateReview.js');
+const listingController = require('../controllers/listing.js');
 
 // Index Route
-routerListing.get(
-  '/',
-  wrapAsync(async (req, res) => {
-    let allListing = await Listing.find();
-    res.render('listing/index.ejs', { allListing });
-  })
-);
+routerListing.get('/', wrapAsync(listingController.index));
 // New & Create Route
 //
 routerListing.get(
