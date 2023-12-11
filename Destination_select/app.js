@@ -9,7 +9,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStretegy = require('passport-local');
-const User = require('./Models/user.js');
+const User = require('./models/user.js');
 const path = require('path');
 const app = express();
 
