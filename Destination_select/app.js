@@ -53,9 +53,9 @@ const sessionOption = {
   },
 };
 // Create New Home  Routes
-app.get('/', (req, res) => {
-  res.send('Your home roots is working');
-});
+// app.get('/', (req, res) => {
+//   res.send('Your home roots is working');
+// });
 
 app.use(session(sessionOption));
 app.use(flash());
