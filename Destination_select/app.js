@@ -9,15 +9,18 @@ const routerListing = require('./routes/listing.js');
 const reviewRouter = require('./routes/reviewRouter.js');
 const userRouter = require('./routes/userRoutes.js');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStretegy = require('passport-local');
 const User = require('./models/user.js');
 const path = require('path');
+const { error } = require('console');
 const app = express();
 
 // DB Connection
-let MONGO_URL = 'mongodb://127.0.0.1:27017/Destination_select';
+// let MONGO_URL = 'mongodb://127.0.0.1:27017/Destination_select';
+let MONGO_URL = process.env.ATALAS_URL;
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
@@ -41,9 +44,19 @@ app.use(methodOverride('_method'));
 app.engine('ejs', ejsMate);
 //  for the static use like CSS and JS
 app.use(express.static(path.join(__dirname, '/public')));
-
+const store = MongoStore.create({
+  mongoUrl: MONGO_URL,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600,
+});
+store.on('error', () => {
+  console.log('ERROR in MONGO SESSION STORE', error);
+});
 const sessionOption = {
-  secret: 'mysupersecreatstring',
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
